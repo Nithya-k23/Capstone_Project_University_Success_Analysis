@@ -217,11 +217,15 @@ EDA was performed using SQL queries, and results were visualized in Excel. Below
 
 #### SQL Query:
 ```sql
-SELECT c.country_name, g.gdp, COUNT(u.id) AS num_universities
-FROM Country c
-JOIN gdp_data g ON c.id = g.country_id
-JOIN University u ON c.id = u.country_id
-GROUP BY c.country_name, g.gdp;
+SELECT c.country_name,COUNT(u.id) AS num_universities,g.gdp
+FROM 
+university u JOIN country c 
+ON u.country_id = c.id
+LEFT JOIN gdp_data g 
+ON c.id = g.country_id
+GROUP BY 
+c.country_name, g.gdp;
+
 ```
 #### Chart Creation (Scatter Plot):
 1. Insert the SQL query output into an Excel sheet.
@@ -236,12 +240,13 @@ GROUP BY c.country_name, g.gdp;
 
 #### SQL Query:
 ```sql
-SELECT c.country_name, uy.year, COUNT(u.id) AS num_universities
-FROM University u
-JOIN University_year uy ON u.id = uy.university_id
-JOIN Country c ON u.country_id = c.id
-GROUP BY c.country_name, uy.year
-ORDER BY uy.year;
+SELECT c.country_name,uy.year, COUNT(DISTINCT uy.university_id) AS num_universities
+FROM university_year uy INNER JOIN university u 
+ON uy.university_id = u.id
+INNER JOIN country c 
+ON u.country_id = c.id
+GROUP BY c.country_name,uy.year
+ORDER BY c.country_name,uy.year;
 ```
 #### Chart Creation (Line Chart):
 1. Insert the output data into an Excel sheet.
@@ -258,9 +263,9 @@ ORDER BY uy.year;
 #### SQL Query:
 ```sql
 SELECT c.country_name, p.population_millions, COUNT(u.id) AS num_universities
-FROM Country c
-JOIN population p ON c.id = p.country_id
-JOIN University u ON c.id = u.country_id
+FROM country c INNER JOIN population p ON c.id = p.country_id
+INNER JOIN university u 
+ON c.id = u.country_id
 GROUP BY c.country_name, p.population_millions;
 ```
 #### Chart Creation (Scatter Plot):
@@ -276,10 +281,9 @@ GROUP BY c.country_name, p.population_millions;
 
 #### SQL Query:
 ```sql
-SELECT rc.criteria_name, COUNT(DISTINCT rs.id) AS num_ranking_systems
-FROM Ranking_Criteria rc
-JOIN Ranking_System rs ON rc.ranking_system_id = rs.id
-GROUP BY rc.criteria_name;
+SELECT criteria_name, COUNT(DISTINCT ranking_system_id) num_ranking_system
+FROM ranking_criteria
+GROUP BY criteria_name;
 ```
 #### Chart Creation (Bar Chart):
 1. Insert the query output into an Excel sheet.
@@ -294,12 +298,12 @@ GROUP BY rc.criteria_name;
 
 #### SQL Query:
 ```sql
-SELECT uy.year, rs.system_name, AVG(ury.Score) AS avg_score
-FROM University_ranking_year ury
-JOIN Ranking_Criteria rc ON ury.ranking_criteria_id = rc.id
-JOIN Ranking_System rs ON rc.ranking_system_id = rs.id
-JOIN University_year uy ON ury.university_id = uy.university_id
-GROUP BY uy.year, rs.system_name;
+SELECT rs.system_name, ury.year, AVG(ury.score) AS avg_score
+FROM university_ranking_year ury
+INNER JOIN ranking_criteria rc ON ury.ranking_criteria_id = rc.id
+INNER JOIN ranking_system rs ON rc.ranking_system_id = rs.id
+GROUP BY rs.system_name, ury.year
+ORDER BY rs.system_name, ury.year;
 ```
 #### Chart Creation (Line Chart):
 1. Insert the output data into an Excel sheet.
@@ -315,11 +319,11 @@ GROUP BY uy.year, rs.system_name;
 
 #### SQL Query:
 ```sql
-SELECT rs.system_name, AVG(uy.pct_international_students) AS avg_pct_international
-FROM University_year uy
-JOIN University_ranking_year ury ON uy.university_id = ury.university_id
-JOIN Ranking_Criteria rc ON ury.ranking_criteria_id = rc.id
-JOIN Ranking_System rs ON rc.ranking_system_id = rs.id
+SELECT rs.system_name, AVG(uy.num_students*uy.pct_international_students) AS avg_international_students
+FROM university_year uy JOIN university u ON uy.university_id = u.id
+JOIN university_ranking_year ury ON uy.university_id = ury.university_id AND uy.year = ury.year
+JOIN ranking_criteria rc ON ury.ranking_criteria_id = rc.id
+JOIN ranking_system rs ON rc.ranking_system_id = rs.id
 GROUP BY rs.system_name;
 ```
 #### Chart Creation (Pie Chart):
@@ -335,10 +339,12 @@ GROUP BY rs.system_name;
 
 #### SQL Query:
 ```sql
-SELECT rc.criteria_name, rs.system_name, COUNT(*) AS weight_count
-FROM Ranking_Criteria rc
-JOIN Ranking_System rs ON rc.ranking_system_id = rs.id
-GROUP BY rc.criteria_name, rs.system_name;
+SELECT rs.system_name, rc.criteria_name, AVG(ury.score) AS avg_score
+FROM university_ranking_year ury
+INNER JOIN ranking_criteria rc ON ury.ranking_criteria_id = rc.id
+INNER JOIN ranking_system rs ON rc.ranking_system_id = rs.id
+GROUP BY rs.system_name, rc.criteria_name
+ORDER BY rs.system_name, rc.criteria_name,avg_score DESC;
 ```
 #### Chart Creation (Treemap Chart):
 1. Insert the output into an Excel sheet.
@@ -353,10 +359,11 @@ GROUP BY rc.criteria_name, rs.system_name;
 **Objective:** Examine how ranking weightage evolved.
 
 ```sql
-SELECT year, criteria_name, AVG(Score) AS avg_weight
-FROM University_ranking_year ury
-JOIN Ranking_Criteria rc ON ury.ranking_criteria_id = rc.id
-GROUP BY year, criteria_name;
+SELECT rc.criteria_name, ury.year, AVG(ury.score) AS avg_weight
+FROM university_ranking_year ury
+INNER JOIN ranking_criteria rc ON ury.ranking_criteria_id = rc.id
+GROUP BY rc.criteria_name, ury.year
+ORDER BY rc.criteria_name ury.year;
 ```
 
 **Chart Type:** Line Chart
@@ -368,10 +375,11 @@ GROUP BY year, criteria_name;
 **Objective:** Check if universities with higher scores have better student-staff ratios.
 
 ```sql
-SELECT uy.university_id, uy.student_staff_ratio, ury.Score
-FROM University_year uy
-JOIN University_ranking_year ury ON uy.university_id = ury.university_id
-AND uy.year = ury.year;
+SELECT  u.university_name, AVG(uy.student_staff_ratio) Avg_Student_Staff_Ratio, AVG(ury.score) Avg_Score
+FROM university_year uy INNER JOIN university_ranking_year ury 
+ON uy.university_id = ury.university_id AND uy.year = ury.year
+INNER JOIN university u ON ury.university_id = u.id
+GROUP BY  1;
 ```
 
 **Chart Type:** Scatter Plot
@@ -383,8 +391,10 @@ AND uy.year = ury.year;
 **Objective:** Understand gender distribution in universities.
 
 ```sql
-SELECT university_id, pct_female_students
-FROM University_year;
+SELECT u.university_name, AVG(uy.num_students*uy.pct_female_students) Avg_Female_Students
+FROM university_year uy INNER JOIN university u ON uy.university_id = u.id
+GROUP BY u.university_name
+ORDER BY u.university_name;
 ```
 
 **Chart Type:** Column Chart
@@ -396,10 +406,10 @@ FROM University_year;
 **Objective:** Examine university distribution globally.
 
 ```sql
-SELECT c.country_name, COUNT(u.id) AS university_count
-FROM Country c
-JOIN University u ON c.id = u.country_id
-GROUP BY c.country_name;
+SELECT c.country_name, COUNT(u.id) AS num_universities
+FROM country c INNER JOIN university u ON c.id = u.country_id
+GROUP BY c.country_name
+ORDER BY num_universities DESC;
 ```
 
 **Chart Type:** Map Chart
@@ -411,8 +421,11 @@ GROUP BY c.country_name;
 **Objective:** Track university ranking evolution.
 
 ```sql
-SELECT university_id, year, Score
-FROM University_ranking_year;
+SELECT DISTINCT u.university_name,ury.year, 
+AVG(ury.score) OVER (PARTITION BY u.university_name,ury.year ORDER BY ury.year) Avg_score
+FROM university_ranking_year ury INNER JOIN university u 
+ON ury.university_id = u.id;
+  
 ```
 
 **Chart Type:** Column Chart with Slicer
@@ -424,9 +437,9 @@ FROM University_ranking_year;
 **Objective:** Observe changes in female student enrollment.
 
 ```sql
-SELECT year, AVG(pct_female_students) AS avg_female_students
-FROM University_year
-GROUP BY year;
+SELECT uy.year, AVG(uy.pct_female_students) AS avg_female_students
+FROM university_year uy
+GROUP BY uy.year;
 ```
 
 **Chart Type:** Area Chart
@@ -438,9 +451,10 @@ GROUP BY year;
 **Objective:** Study how scores fluctuate over time.
 
 ```sql
-SELECT year, AVG(Score) AS avg_score
-FROM University_ranking_year
-GROUP BY year;
+SELECT ury.year, AVG(ury.score) AS avg_score
+FROM university_ranking_year ury
+GROUP BY ury.year
+ORDER BY ury.year;
 ```
 
 **Chart Type:** Line Chart
@@ -452,9 +466,10 @@ GROUP BY year;
 **Objective:** Assess if student count affects ranking score.
 
 ```sql
-SELECT uy.num_students, ury.Score
-FROM University_year uy
-JOIN University_ranking_year ury ON uy.university_id = ury.university_id AND uy.year = ury.year;
+SELECT u.university_name, AVG(uy.num_students) Avg_Num_Students, AVG(ury.score) Avg_Score
+FROM university_year uy INNER JOIN university_ranking_year ury ON uy.university_id = ury.university_id AND uy.year = ury.year
+INNER JOIN university u ON ury.university_id = u.id
+GROUP BY u.university_name;
 ```
 
 **Chart Type:** Scatter Plot
@@ -722,13 +737,7 @@ Each question includes its **Objective**, **Steps to Create Visuals**, and the *
 ```
 
 
-## Conclusion
-This Power BI analysis provides valuable insights into university rankings, international student trends, student-staff ratios, and the effect of rankings on university demographics. These visualizations help stakeholders make data-driven decisions regarding university performance and student engagement.
 
----
-
-## Repository Contents
-- **SQL Queries:** Contains all SQL scripts used for data extraction.
 - **Excel Visualizations:** Contains charts and pivot tables created from SQL query results.
 - **Power BI Dashboards:** Includes Power BI files with all visualizations.
 - **Readme Documentation:** Provides an overview of the analysis, steps, and objectives.
