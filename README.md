@@ -734,7 +734,19 @@ Each question includes its **Objective**, **Steps to Create Visuals**, and the *
 4. Set the **Y-axis** to `student_staff_ratio`.
 5. Use `university_name` as a legend or tooltip.
 6. Customize the title: **"International Students vs. Student-Staff Ratio"**.
-```
+---
+
+## Conclusion
+This Power BI analysis provides valuable insights into university rankings, international student trends, student-staff ratios, and the effect of rankings on university demographics. These visualizations help stakeholders make data-driven decisions regarding university performance and student engagement.This project provides deep insights into university success factors, ranking systems, and country-level influences using SQL, Excel, and Power BI. The combination of SQL-based EDA and Power BI visualization offers a comprehensive analysis of university rankings and performance trends globally.
+
+
+---
+
+## Repository Contents
+- **SQL Queries:** Contains all SQL scripts used for data extraction.
+- **Excel Visualizations:** Contains charts and pivot tables created from SQL query results.
+- **Power BI Dashboards:** Includes Power BI files with all visualizations.
+- **Readme Documentation:** Provides an overview of the analysis, steps, and objectives.
 
 
 
