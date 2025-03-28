@@ -1,6 +1,6 @@
 # Google Drive Link https://drive.google.com/file/d/1NcB2aoVxKWGYBaDsXQf4MSej-ka0dcMq/view?usp=sharing
 
-# University_Success_Analysis
+# Capstone Project - University Success Analysis
 university success analysis  using powerBI, excel, SQL
 ## Overview
 This project analyzes university rankings, performance, and country-level trends using Power BI, SQL, and Excel. The dataset includes six tables covering universities, rankings, and country information. Additional data on GDP and population are used for deeper insights. The analysis is structured into four categories based on the MECE framework:
@@ -94,6 +94,7 @@ The analysis uses **six primary tables** with additional tables for country-leve
 
 ### **Primary Tables**
 #### **1. University**
+Contains basic details about universities.
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
 | id | INT | Unique identifier for the university. |
@@ -101,6 +102,8 @@ The analysis uses **six primary tables** with additional tables for country-leve
 | university_name | STRING | Name of the university. |
 
 #### **2. University_ranking_year**
+Stores yearly university ranking scores based on different ranking criteria.
+
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
 | university_id | INT | Unique identifier for the university. |
@@ -109,6 +112,7 @@ The analysis uses **six primary tables** with additional tables for country-leve
 | Score | DECIMAL | Score assigned to the university based on the ranking criteria. |
 
 #### **3. University_year**
+Records yearly university statistics related to student demographics and staff ratios.
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
 | university_id | INT | Foreign key referencing the university table. |
@@ -119,12 +123,14 @@ The analysis uses **six primary tables** with additional tables for country-leve
 | pct_female_students | DECIMAL | Percentage of female students. |
 
 #### **4. Country**
+Stores details about different countries.
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
 | id | INT | Unique identifier for the country. |
 | country_name | STRING | Name of the country. |
 
 #### **5. Ranking_Criteria**
+Defines the criteria used for ranking universities.
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
 | id | INT | Unique identifier for the ranking criteria. |
@@ -132,6 +138,7 @@ The analysis uses **six primary tables** with additional tables for country-leve
 | criteria_name | STRING | Name of the ranking criteria (e.g., research output, employability). |
 
 #### **6. Ranking_System**
+Contains information about different university ranking systems.
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
 | id | INT | Unique identifier for the ranking system. |
@@ -139,12 +146,14 @@ The analysis uses **six primary tables** with additional tables for country-leve
 
 ### **Additional Tables**
 #### **7. GDP Data**
+Stores details about different countries GDP.
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
 | country_id | INT | Unique identifier of the country. |
 | gdp | DECIMAL | GDP of each country. |
 
 #### **8. Population Data**
+Stores details about different countries Population.
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
 | country_id | INT | Unique identifier of the country. |
@@ -1077,12 +1086,12 @@ This Power BI analysis provides valuable insights into university rankings, inte
 - **SQL Queries:** Contains all SQL scripts used for data extraction.
 - **Excel Visualizations:** Contains charts and pivot tables created from SQL query results.
 - **Power BI Dashboards:** Includes Power BI files with all visualizations.
+- **MECE Breakdown:** Provides MECE Breakdown Of Capstone Project.
+- **KPI:** Showing KPI'S used in this Project.
+- **Data Dictionary:** Provides details pf all table used in this dataset.
 - **Readme Documentation:** Provides an overview of the analysis, steps, and objectives.
 
 
 
-- **Excel Visualizations:** Contains charts and pivot tables created from SQL query results.
-- **Power BI Dashboards:** Includes Power BI files with all visualizations.
-- **Readme Documentation:** Provides an overview of the analysis, steps, and objectives.
-```
+
 
