@@ -3,22 +3,20 @@
 # Capstone Project - University Success Analysis
 university success analysis  using powerBI, excel, SQL
 ## Overview
-This project analyzes university rankings, performance, and country-level trends using Power BI, SQL, and Excel. The dataset includes six tables covering universities, rankings, and country information. Additional data on GDP and population are used for deeper insights. The analysis is structured into four categories based on the MECE framework:
-
-- University Analysis
-
-- Ranking System Analysis
-
-- Performance Analysis
-
-- Country-Level Analysis
+University Success Analysis is a data-driven project that explores the factors influencing university rankings, student demographics, and country-level trends using Power BI, Excel, and SQL. The analysis utilizes structured datasets containing university details, ranking criteria, country information, and economic indicators (GDP and population). The project involves data cleaning, transformation, and visualization to gain insights into university performance and trends.
   
 ## Significance
-Understanding university performance metrics helps:
-- Students make informed education choices
-- Universities identify improvement areas
-- Policymakers allocate resources effectively
-- Researchers study education trends globally
+Understanding university success factors is crucial for students, educators, policymakers, and institutions. This project provides valuable insights into:
+
+- The impact of ranking systems on university performance.
+
+- The relationship between economic factors (GDP, population) and higher education institutions.
+
+- Trends in student demographics, including international student enrollment and gender distribution.
+
+- The effect of ranking scores on university resources and student-staff ratios.
+
+- Data-driven decision-making in university improvements and policy reforms.
 
 
 ## Data Samples
@@ -158,6 +156,48 @@ Stores details about different countries Population.
 |-------------|-----------|-------------|
 | country_id | INT | Unique identifier of the country. |
 | population_millions | DECIMAL | Population of each country (in millions). |
+
+
+## Process Steps
+
+### Data Extraction & Storage:
+
+- Extracted CSV files from a GitHub repository.
+
+- Imported SQL files for structured data analysis.
+
+### MECE Breakdown
+
+- Categorized analysis into University Analysis, Ranking System Analysis, Performance Analysis, and Country-Level Analysis.
+
+### Data Cleaning & Transformation:
+
+- Power Query Editor was used to clean and shape CSV files.
+
+- SQL queries were used for data transformation and analysis in Excel.
+
+### Exploratory Data Analysis (EDA):
+
+- Used SQL queries to analyze university distributions, ranking trends, and student demographics.
+
+- Created visualizations in Excel.
+
+### Power BI Analysis:
+
+- Load datat used csv files.
+  
+-  Done data modeling.
+
+- Implemented visualizations in Power BI with appropriate DAX functions.
+
+- Calculated key performance indicators (KPIs) for student-staff ratio, total students, and average ranking scores,Total International Students,Total Female Students.
+
+  ### Power Point Presentation:
+  - Create power point presentation for all EDA and PowerBI Problem Statements.
+ 
+
+  ### Documentation:
+  - Dtailed documentation of the entire project in the word.
 
 
 
@@ -630,6 +670,15 @@ GROUP BY u.university_name;
 
 This section contains Power BI visualizations created using CSV files from the GitHub repository.
 Each question includes its **Objective**, **Steps to Create Visuals**, and the **Visualization Type** used in Power BI.
+
+
+### Data Modelling
+- Create done modeling by combing using tables which are combined for reduce complexity,merged country table with university and named as fact_university_country,merged ranking_system and ranking_criteria tables as fact_ranking criteria_system and added dim_year table to avoid many to mant connection between university_year and university_rasnking_year tables.
+
+
+![image](https://github.com/user-attachments/assets/20d3a158-e3a3-497f-a4f5-a2435f2191ae)
+
+
 
 ---
 
